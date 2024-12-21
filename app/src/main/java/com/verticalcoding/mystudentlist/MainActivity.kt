@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,7 +41,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.verticalcoding.mystudentlist.data.models.StudentList
+import com.verticalcoding.mystudentlist.data.models.StudentScreen
+import com.verticalcoding.mystudentlist.presentation.components.GreetingBox
+import com.verticalcoding.mystudentlist.presentation.screens.StudentsList
 import com.verticalcoding.mystudentlist.ui.theme.MyStudentListTheme
+import kotlinx.serialization.Serializable
 
 class MainActivity : ComponentActivity() {
 
@@ -52,195 +63,31 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyStudentListTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ){
-                            OutlinedTextField(
-                                value = name,
-                                onValueChange = { name = it }
-                            )
-
-                            OutlinedButton(onClick = {
-                                students += name
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = null
-                                )
-                            }
-                        }
-
-                        LazyColumn(
-                            modifier = Modifier
-                                .padding(top=16.dp)
-                        ) {
-                            items(students.toList()) { studentName ->
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 8.dp, horizontal = 16.dp)
-                                ) {
-                                    Text(
-                                        text = studentName,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-
-                                    Spacer(Modifier.weight(1f))
-
-                                    IconButton(onClick = {
-                                        students = students.minus(studentName)
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Delete,
-                                            contentDescription = null)
-                                    }
-                                }
-                            }
-                        }
-
-//                        LazyRow(
-//                            modifier = Modifier
-//                                .padding(top=16.dp)
-//                        ) {
-//                            items(students.toList()) { studentName ->
-//                                Column(
-//                                    horizontalAlignment = Alignment.CenterHorizontally,
-//                                    modifier = Modifier
-//                                        .fillMaxWidth()
-//                                        .padding(vertical = 8.dp, horizontal = 16.dp)
-//                                ) {
-//                                    Text(
-//                                        text = studentName,
-//                                        fontWeight = FontWeight.SemiBold
-//                                    )
-//
-//                                    IconButton(onClick = {
-//                                        students = students.minus(studentName)
-//                                    }) {
-//                                        Icon(
-//                                            imageVector = Icons.Default.Delete,
-//                                            contentDescription = null)
-//                                    }
-//                                }
+                val navigationController = rememberNavController()
+                NavHost(navController = navigationController, startDestination = StudentList) {
+                    composable<StudentList> {
+//                        StudentsList(
+//                            name = name,
+//                            students = students,
+//                            navController = navigationController,
+//                            onNameChange = { name = it },
+//                            onAddStudent = { studentName ->
+//                                students = students + studentName
+//                            },
+//                            onDeleteStudent = { studentName ->
+//                                students = students - studentName
 //                            }
-//                        }
+//                        )
+
+                        GreetingBox(name = name, onNameChange = { name = it })
+                    }
+                    composable<StudentScreen> {
+                        val args = it.toRoute<StudentScreen>()
+
+                        Text(text=args.name, modifier = Modifier.fillMaxSize(), fontSize = 72.sp)
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun GreetingColumn(name: String, onNameChange: (String) -> Unit) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .padding(top=100.dp)
-            .height(100.dp)
-            .fillMaxWidth()
-            .padding(16.dp)
-    ){
-        Text(
-            text = "Hello $name!"
-        )
-        Button(
-            enabled = validateName(name),
-            onClick = {
-            val name = getRandomName()
-            print(name)
-            onNameChange(name)
-        }) {
-            Text(text = "Random Name")
-        }
-    }
-}
-
-@Composable
-fun GreetingRow(name: String, onNameChange: (String) -> Unit) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround,
-        modifier = Modifier
-            .padding(top=100.dp)
-            .height(100.dp)
-            .fillMaxWidth()
-            .padding(16.dp)
-    ){
-        Text(
-            text = "Hello $name!"
-        )
-        FilledTonalButton (
-            enabled = validateName(name),
-            onClick = {
-            val name = getRandomName()
-            print(name)
-            onNameChange(name)
-        }) {
-            Text(text = "Random Name")
-        }
-    }
-}
-
-fun validateName(name: String): Boolean {
-    return name.isNotEmpty() && name.length > 3
-}
-
-fun getRandomName(): String {
-    val names = listOf(
-        "Liam", "Olivia", "Noah", "Emma", "Oliver", "Ava", "Elijah", "Charlotte",
-        "William", "Sophia", "James", "Amelia", "Benjamin", "Isabella", "Lucas", "Mia",
-        "Henry", "Evelyn", "Alexander", "Harper", "Michael", "Luna", "Daniel", "Ella",
-        "Matthew", "Elizabeth", "Samuel", "Sofia", "Jackson", "Emily", "Joseph", "Avery",
-        "Sebastian", "Scarlett", "David", "Grace", "Carter", "Chloe", "Owen", "Victoria",
-        "Wyatt", "Riley", "John", "Aria", "Jack", "Lily", "Luke", "Aubrey", "Jayden", "Zoey",
-        "Dylan", "Addison", "Grayson", "Lillian", "Levi", "Natalie", "Isaac", "Hannah",
-        "Gabriel", "Brooklyn", "Julian", "Samantha", "Mateo", "Zoe", "Anthony", "Eleanor",
-        "Jaxon", "Leah", "Lincoln", "Audrey", "Joshua", "Skylar", "Christopher", "Ellie",
-        "Andrew", "Paisley", "Theodore", "Violet", "Caleb", "Stella", "Ryan", "Aurora",
-        "Asher", "Hazel", "Nathan", "Aaliyah", "Thomas", "Madelyn", "Leo", "Elena",
-        "Isaiah", "Sarah", "Charles", "Ariana", "Josiah", "Penelope", "Hudson", "Lila",
-        "Christian", "Layla", "Hunter", "Nora", "Connor", "Reese", "Eli", "Mackenzie",
-        "Ezra", "Madeline", "Aaron", "Abigail", "Nicholas", "Willow", "Cameron", "Sadie",
-        "Adrian", "Quinn", "Jonathan", "Caroline", "Nolan", "Allison", "Jeremiah", "Genesis",
-        "Easton", "Eva", "Elias", "Piper", "Colton", "Gianna", "Carson", "Serenity",
-        "Robert", "Autumn", "Angel", "Nevaeh", "Brayden", "Jocelyn", "Jordan", "Faith",
-        "Nicholas", "Bella", "Dominic", "Katherine", "Austin", "Alexandra", "Ian", "Kylie",
-        "Adam", "Brianna", "Elias", "Anna", "Jaxson", "Mary", "Greyson", "Ashley",
-        "Jose", "Isabelle"
-    )
-
-    return names.random()
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingColumnPreview() {
-    MyStudentListTheme {
-        GreetingColumn("Android", onNameChange = { name ->
-            print(name)
-        })
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingRowPreview() {
-    MyStudentListTheme {
-        GreetingRow("Android", onNameChange = { name ->
-            print(name)
-        })
     }
 }
