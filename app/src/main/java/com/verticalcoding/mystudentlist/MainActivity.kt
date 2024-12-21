@@ -66,20 +66,18 @@ class MainActivity : ComponentActivity() {
                 val navigationController = rememberNavController()
                 NavHost(navController = navigationController, startDestination = StudentList) {
                     composable<StudentList> {
-//                        StudentsList(
-//                            name = name,
-//                            students = students,
-//                            navController = navigationController,
-//                            onNameChange = { name = it },
-//                            onAddStudent = { studentName ->
-//                                students = students + studentName
-//                            },
-//                            onDeleteStudent = { studentName ->
-//                                students = students - studentName
-//                            }
-//                        )
-
-                        GreetingBox(name = name, onNameChange = { name = it })
+                        StudentsList(
+                            name = name,
+                            students = students,
+                            navController = navigationController,
+                            onNameChange = { name = it },
+                            onAddStudent = { studentName ->
+                                students = students + studentName
+                            },
+                            onDeleteStudent = { studentName ->
+                                students = students - studentName
+                            }
+                        )
                     }
                     composable<StudentScreen> {
                         val args = it.toRoute<StudentScreen>()
