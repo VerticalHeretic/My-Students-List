@@ -78,13 +78,13 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        LazyRow(
+                        LazyColumn(
                             modifier = Modifier
                                 .padding(top=16.dp)
                         ) {
                             items(students.toList()) { studentName ->
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(vertical = 8.dp, horizontal = 16.dp)
@@ -93,6 +93,8 @@ class MainActivity : ComponentActivity() {
                                         text = studentName,
                                         fontWeight = FontWeight.SemiBold
                                     )
+
+                                    Spacer(Modifier.weight(1f))
 
                                     IconButton(onClick = {
                                         students = students.minus(studentName)
@@ -104,6 +106,33 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
+
+//                        LazyRow(
+//                            modifier = Modifier
+//                                .padding(top=16.dp)
+//                        ) {
+//                            items(students.toList()) { studentName ->
+//                                Column(
+//                                    horizontalAlignment = Alignment.CenterHorizontally,
+//                                    modifier = Modifier
+//                                        .fillMaxWidth()
+//                                        .padding(vertical = 8.dp, horizontal = 16.dp)
+//                                ) {
+//                                    Text(
+//                                        text = studentName,
+//                                        fontWeight = FontWeight.SemiBold
+//                                    )
+//
+//                                    IconButton(onClick = {
+//                                        students = students.minus(studentName)
+//                                    }) {
+//                                        Icon(
+//                                            imageVector = Icons.Default.Delete,
+//                                            contentDescription = null)
+//                                    }
+//                                }
+//                            }
+//                        }
                     }
                 }
             }
