@@ -31,7 +31,7 @@ import kotlin.collections.plus
 @Composable
 fun StudentsList(
     name: String,
-    students: Set<String>,
+    students: List<String>,
     navController: NavController,
     onNameChange: (String) -> Unit,
     onAddStudent: (String) -> Unit,
@@ -53,7 +53,9 @@ fun StudentsList(
                     onValueChange = { onNameChange(it) }
                 )
 
-                OutlinedButton(onClick = {
+                OutlinedButton(
+                    enabled = name.isNotEmpty() && name.length > 3,
+                    onClick = {
                     onAddStudent(name)
                     onNameChange("")
                 }) {

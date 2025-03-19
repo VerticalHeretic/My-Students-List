@@ -19,9 +19,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,8 +59,10 @@ import kotlinx.serialization.Serializable
 class MainActivity : ComponentActivity() {
 
     private var name by mutableStateOf("Łukasz")
-    private var students by mutableStateOf(setOf<String>())
+//    private var students by mutableStateOf(setOf<String>())
+    private var students by mutableStateOf(emptyList<String>())
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -82,7 +87,38 @@ class MainActivity : ComponentActivity() {
                     composable<StudentScreen> {
                         val args = it.toRoute<StudentScreen>()
 
-                        Text(text=args.name, modifier = Modifier.fillMaxSize(), fontSize = 72.sp)
+                        Scaffold(
+                            topBar = {
+                                CenterAlignedTopAppBar(
+                                    title = {
+                                        Text("Detale studenta")
+                                    },
+                                    navigationIcon = {
+                                        IconButton(onClick = { navigationController.popBackStack() }) {
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                contentDescription = null
+                                            )
+                                        }
+                                    },
+                                    actions = {
+                                        IconButton(onClick = {
+                                            students = students - args.name
+                                            navigationController.popBackStack()
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Delete,
+                                                contentDescription = null
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        ) { inner ->
+                            Text(text=args.name, modifier = Modifier.padding(inner).fillMaxSize(), fontSize = 72.sp)
+                        }
+
+
                     }
                 }
             }
