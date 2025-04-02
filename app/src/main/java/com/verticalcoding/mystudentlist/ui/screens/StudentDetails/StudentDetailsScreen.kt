@@ -52,46 +52,6 @@ import coil3.request.crossfade
 import com.verticalcoding.mystudentlist.StudentsListApplication
 import kotlinx.coroutines.launch
 
-class StudentDetailsViewModel(
-    private val dogsPhotosRepository: DogsPhotosRepository
-) : ViewModel() {
-
-    sealed interface UiState {
-        data class Success(val photo: DogPhoto): UiState
-        object Error: UiState
-        object Loading: UiState
-    }
-
-    var uiState: UiState by mutableStateOf(UiState.Loading); private set
-
-    init {
-        getDogImage()
-    }
-
-    fun getDogImage() {
-        viewModelScope.launch {
-            uiState = UiState.Loading
-            uiState = try {
-                val image = dogsPhotosRepository.getRandomDogImage()
-                println(image.message)
-                UiState.Success(image)
-            } catch (e: Exception) {
-                UiState.Error
-            }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-           initializer {
-               val application = (this[APPLICATION_KEY] as StudentsListApplication)
-               val dogsPhotosRepository = application.container.dogsPhotosRepository
-               StudentDetailsViewModel(dogsPhotosRepository)
-           }
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentDetailsScreen(
