@@ -1,4 +1,4 @@
-package com.verticalcoding.mystudentlist.data.models
+package com.verticalcoding.mystudentlist.model
 
 import kotlinx.serialization.Serializable
 

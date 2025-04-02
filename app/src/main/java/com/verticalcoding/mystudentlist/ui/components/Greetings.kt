@@ -1,4 +1,4 @@
-package com.verticalcoding.mystudentlist.presentation.components
+package com.verticalcoding.mystudentlist.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

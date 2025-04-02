@@ -1,4 +1,4 @@
-package com.verticalcoding.mystudentlist.presentation.screens
+package com.verticalcoding.mystudentlist.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,8 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.verticalcoding.mystudentlist.data.models.StudentScreen
-import kotlin.collections.plus
+import com.verticalcoding.mystudentlist.model.StudentScreen
 
 @Composable
 fun StudentsList(
