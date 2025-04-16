@@ -13,15 +13,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.verticalcoding.mystudentlist.model.StudentList
 import com.verticalcoding.mystudentlist.model.StudentScreen
-import com.verticalcoding.mystudentlist.ui.screens.StudentsList
+import com.verticalcoding.mystudentlist.ui.screens.StudentsList.DogsList
 import com.verticalcoding.mystudentlist.ui.theme.MyStudentListTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.verticalcoding.mystudentlist.ui.screens.StudentDetails.StudentDetailsScreen
 import com.verticalcoding.mystudentlist.ui.screens.StudentDetails.StudentDetailsViewModel
+import com.verticalcoding.mystudentlist.ui.screens.StudentsList.DogsScreen
+import com.verticalcoding.mystudentlist.ui.screens.StudentsList.StudentsListViewModel
 
 class MainActivity : ComponentActivity() {
 
-    private var name by mutableStateOf("Łukasz")
     private var students by mutableStateOf(emptyList<String>())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,17 +33,11 @@ class MainActivity : ComponentActivity() {
                 val navigationController = rememberNavController()
                 NavHost(navController = navigationController, startDestination = StudentList) {
                     composable<StudentList> {
-                        StudentsList(
-                            name = name,
-                            students = students,
-                            navController = navigationController,
-                            onNameChange = { name = it },
-                            onAddStudent = { studentName ->
-                                students = students + studentName
-                            },
-                            onDeleteStudent = { studentName ->
-                                students = students - studentName
-                            }
+                        val viewModel: StudentsListViewModel =
+                            viewModel(factory = StudentsListViewModel.Factory)
+                        DogsScreen(
+                            viewModel = viewModel,
+                            navigationController = navigationController
                         )
                     }
                     composable<StudentScreen> {

@@ -10,12 +10,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.verticalcoding.mystudentlist.StudentsListApplication
-import com.verticalcoding.mystudentlist.data.DogsPhotosRepository
+import com.verticalcoding.mystudentlist.data.DogsRepository
 import com.verticalcoding.mystudentlist.model.DogPhoto
 import kotlinx.coroutines.launch
 
 class StudentDetailsViewModel(
-    private val dogsPhotosRepository: DogsPhotosRepository
+    private val dogsRepository: DogsRepository
 ) : ViewModel() {
 
     sealed interface UiState {
@@ -34,7 +34,7 @@ class StudentDetailsViewModel(
         viewModelScope.launch {
             uiState = UiState.Loading
             uiState = try {
-                val image = dogsPhotosRepository.getRandomDogImage()
+                val image = dogsRepository.getRandomDogImage()
                 UiState.Success(image)
             } catch (e: Exception) {
                 UiState.Error
@@ -46,7 +46,7 @@ class StudentDetailsViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as StudentsListApplication)
-                val dogsPhotosRepository = application.container.dogsPhotosRepository
+                val dogsPhotosRepository = application.container.dogsRepository
                 StudentDetailsViewModel(dogsPhotosRepository)
             }
         }
