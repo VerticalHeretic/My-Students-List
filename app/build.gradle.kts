@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.verticalcoding.mystudentlist"
+    namespace = "com.verticalcoding.dogslist"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.verticalcoding.mystudentlist"
+        applicationId = "com.verticalcoding.dogslist"
         minSdk = 29
         targetSdk = 35
         versionCode = 1
